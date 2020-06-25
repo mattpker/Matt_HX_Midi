@@ -22,12 +22,12 @@ byte NUMBER_BUTTONS = 4;
 
 //***DEFINE DIRECTLY CONNECTED BUTTONS*******************************
 //Button (Pin Number, Command, Note Number, Channel, Debounce Time)
-//** Command parameter 0=NOTE  1=CC  2=Toggle CC  3=Preset up/down**
+//** Command parameter 0=NOTE  1=CC  2=Toggle CC
 
-Button BU1(4, 3, 49, 1, 5 ); // Preset Down
-Button BU2(2, 3, 50, 1, 5 ); // Preset Up
-Button BU3(5, 2, 52, 1, 5 ); // FS4
-Button BU4(3, 2, 53, 1, 5 ); // FS5
+Button BU1(2, 2, 64, 1, 5 ); // Tap
+Button BU2(3, 2, 68, 1, 5 ); // Tuner
+Button BU3(4, 2, 52, 1, 5 ); // FS4
+Button BU4(5, 2, 53, 1, 5 ); // FS5
 //*******************************************************************
 //Add buttons used to array below like this->  Button *BUTTONS[] {&BU1, &BU2, &BU3, &BU4};
 Button *BUTTONS[] {&BU1, &BU2, &BU3, &BU4};
@@ -68,16 +68,9 @@ void updateButtons() {
             BUTTONS[i]->Btoggle = 1;
           }
           else if (BUTTONS[i]->Btoggle == 1) {
-            MIDI.sendControlChange(BUTTONS[i]->Bvalue, 0, BUTTONS[i]->Bchannel);
+            MIDI.sendControlChange(BUTTONS[i]->Bvalue, 127, BUTTONS[i]->Bchannel);
             BUTTONS[i]->Btoggle = 0;
           }
-          break;
-        case 3: // Preset up/down
-          MIDI.sendControlChange(71, 1, BUTTONS[i]->Bchannel);
-          delay(100);
-          MIDI.sendControlChange(BUTTONS[i]->Bvalue, 127, BUTTONS[i]->Bchannel);
-          delay(100);
-          MIDI.sendControlChange(71, 0, BUTTONS[i]->Bchannel);
           break;
       }
     }
